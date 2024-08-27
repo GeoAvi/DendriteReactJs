@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  keycloak:
+    image: jboss/keycloak
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_VENDOR=h2
+    ports:
+      - '8080:8080'
+
+  backend:
+    build: ./whiteboard-backend
+    ports:
+      - '3001:3001'
+    depends_on:
+      - keycloak
+
+  frontend:
+    build: ./whiteboard-app
+    ports:
+      - '3000:3000'
+    depends_on:
+      - backend
